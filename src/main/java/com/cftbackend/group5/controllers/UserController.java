@@ -1,6 +1,7 @@
 package com.cftbackend.group5.controllers;
 
 import com.cftbackend.group5.ResourceNotFoundException;
+import com.cftbackend.group5.repositories.EmailsRepository;
 import com.cftbackend.group5.repositories.UserRepository;
 import com.cftbackend.group5.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    private EmailsRepository emailsRepository;
 
     @GetMapping("/user")
     public List<User> getAllUser() {

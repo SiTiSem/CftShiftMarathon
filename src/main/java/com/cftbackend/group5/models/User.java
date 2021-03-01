@@ -1,33 +1,27 @@
 package com.cftbackend.group5.models;
 
-import org.hibernate.validator.internal.constraintvalidators.bv.number.sign.NegativeOrZeroValidatorForLong;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
     @Email(message = "Email should be valid")
     private String email;
 
-    @Column(nullable = false, name="type", columnDefinition="integer default 0")
+    @Column(nullable = false, columnDefinition="integer default 0")
     private Integer type=0;
 
-    public User(){}
-
-    public User(String email, @Email(message = "Email should be valid") Integer type) {
-        this.email = email;
-        this.type = type;
-    }
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    private Set<Emails> emails = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -51,5 +45,17 @@ public class User {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Set<Emails> getEmails() {
+        return emails;
+    }
+
+    public void setEmails(Set<Emails> emails) {
+        this.emails = emails;
+
+        for(Emails b : emails) {
+            b.setUser(this);
+        }
     }
 }
